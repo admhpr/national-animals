@@ -57,23 +57,32 @@ class AnimalsSpider(scrapy.Spider):
         # chunked = list(self.chunks(title_map,4))
         # pprint.pprint(chunked)
 
-        print(country_list)
-        print(animal_list)
-        for i in range(len(country_list)):
+        # print(country_list)
+        # print(animal_list)
+        i = 0
+        counter = 0
+        # manually remove Kurdistan :(
+        del country_list[41]
+        while counter < len(country_list):
             item = Item()
             rowspan = title_map[i + 2]
             item['animal'] = []
-            item['country'] = country_list[i]
+            item['country'] = country_list[counter]
             if int(rowspan) > 0:
                 count = 0
-                while count < int(rowspan):
-                    print(count)
-                    item['animal'].append(animal_list[i + count])
-                    count = count + 1
+                if i < len(country_list):
+                    while count < int(rowspan):
+                        item['animal'].append(animal_list[i + count])
+                        print(count)
+                        print("------------------")
+                        count += 1
+                    i = i + count - 1
             else:
                 item['animal'].append(animal_list[i])
-            
+            print(i)
             data_list.append(item)
+            i += 1
+            counter += 1 
         
         pprint.pprint(data_list)
 
