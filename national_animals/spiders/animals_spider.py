@@ -1,7 +1,10 @@
 import scrapy
 import pprint
-import numpy as np
+import json
+
+
 from national_animals.items import Item
+
 
 class AnimalsSpider(scrapy.Spider):
     name = "animals"
@@ -12,11 +15,7 @@ class AnimalsSpider(scrapy.Spider):
         for url in urls:
             yield scrapy.Request(url=url,callback=self.parse)
 
-    def chunks(context,l, n):
-        """Yield successive n-sized chunks from l."""
-        for i in range(0, len(l), n):
-            yield l[i:i + n]
-
+    # Testing connection leaving for future reference
     # def parse(self, response):
     #     page = response.url.split("/")[-1]
     #     filename = 'test-%s.html' % page 
@@ -59,36 +58,34 @@ class AnimalsSpider(scrapy.Spider):
                  sci_name_list.append("mythical")
              
              # picture
-             pic = data.css('td>a>img::attr(src)').extract()
+             pic = data.css('td>a>img::attr(src)').extract_first()
              
              if(pic):
                  pic_list.append(pic)
              else:
                  pic_list.append("none")
         
-
-             # check for rowspans
+            # checking rowspan values
              n_row = data.css('td::attr(rowspan)').extract_first()
              if n_row:
                     title_map.extend(n_row)
              else:
                     title_map.extend('0')
         
-        # chunked = list(self.chunks(title_map,4))
-        # pprint.pprint(chunked)
-
-        # print(country_list)
-        # print(animal_list)
-        # print(title_map)
+        # imperatively looping through the data
         i = 0
         counter = 0
         del sci_name_list[0]
         del sci_name_list[0]
         del pic_list[0]
         del pic_list[0]
-        # manually remove Kurdistan :(
+        # manually remove Kurdistan :( as it is a pesky edge case
         del country_list[41]
+
+        # using the animals list length as is the larger of the list lengths
         while counter < len(animal_list):
+            
+            # create a new Item on each iteration
             item = Item()
             if(i < len(title_map) - 2):
                 rowspan = title_map[i + 2]
@@ -112,69 +109,20 @@ class AnimalsSpider(scrapy.Spider):
                     item['animal'].append(animal_list[i])
                     item['sci_name'].append(sci_name_list[i])
                     item['pic'].append(pic_list[i])
-            data_list.append(item)
+            data_list.append(item.__dict__)
             i += 1
             counter += 1 
         
         pprint.pprint(data_list)
         
-        file = open('tester.json', 'w')
-        for i in data_list:
-            file.write("%s\n" % i)
-     
+        clean_data = []
+        counter = 0
+        while counter < len(country_list):
+            clean_data.append(data_list[counter])
+            counter += 1
 
-        ## NOT IN USE CURRENTLY
-        # for i in range(len(title_map) + 1):
-        #     offset = 2
-        #     item = Item()
-        #     item['animal'] = []
-        
-        #     if int(title_map[i + offset]) > 0:
-        #         print(title_map[i + offset])
-        #         offset += 2
-        #         # counter = int(title_map[i + offset])
-        #         # while counter:
-        #         #     print(counter)
-        #         #     item['animal'].append(titles[i + int(counter + 1)])
-        #         #     count + int(rowspan)er -= 1
-        #     else:
-        #         print('0')
-            # print(item)
-            # else:
-            # print(titles[i])
-            # print("--------------")
-            # item['country'] = titles[i]
-            # item['animal'] = titles[i + 1]
-            
-            # print(item)
-            # print(title_map[i])
-            # print(titles[i])
-            # if title_map[i]:
-                
-        # print(titles)
-        # print("------")
-        
-        # print(title_map)
-        # print(title_list)
-        
-            
-        #     n_row = data.css('td::attr(rowspan)').extract_first()
-            
-        #     # item = Item()
-        #     # item['country'] = data.css('span[class=flagicon] + a::attr(title)').extract_first()
-        #     print(n_row)
+        with open('national_animals.json', 'w') as outfile:
+            json.dump(clean_data, outfile, indent = 2)
 
-        #     if n_row:
-        #         n_row = int(n_row)
-        #         while n_row > 0:
-        #             arr.extend(data.xpath('/td//following-sibling::td[1]').extract()) 
-        #             n_row -= 1 
-        #     # else: 
-        #         # arr.append(data.css('a::attr(title)').extract()) 
-           
-        # print(arr)
-            
-            # item['animal'] = arr[len(arr) - 1]
-           
-            # print(item)
+  
             
