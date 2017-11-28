@@ -111,14 +111,14 @@ class AnimalsSpider(scrapy.Spider):
 
             # sub loop for rowspans 
             if int(rowspan) > 0:
-                count = 0
+                tracker = 0
                 if i < len(animal_list):
-                    while count < int(rowspan):
-                        item['animal'].append(animal_list[i + count])
-                        item['sci_name'].append(sci_name_list[i + count])
-                        item['pic'].append(pic_list[i + count])
-                        count += 1
-                    i = i + count - 1
+                    while tracker < int(rowspan):
+                        item['animal'].append(animal_list[i + tracker])
+                        item['sci_name'].append(sci_name_list[i + tracker])
+                        item['pic'].append(pic_list[i + tracker])
+                        tracker += 1
+                    i = i + tracker - 1
             else:
                 if i < len(animal_list):
                     item['animal'].append(animal_list[i])
