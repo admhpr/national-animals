@@ -21,12 +21,20 @@ animals_dict = {"name" : "national_animals", "data" : national_animals_list}
 
 i = 0
 while i < len(world_data['features']):
-    world_data['features'][i]['properties']['country'] = world_data['features'][i]['properties'].pop('name')
+    world_data['features'][i]['properties']['country'] = world_data['features'][i]['properties'].pop('name')     
+    world_data['features'][i]['properties']['national_animal']= []
+    world_data['features'][i]['properties']['sci_name']= []
+    world_data['features'][i]['properties']['media']= []
+
     for d in range(len(animals_dict['data'])):
+
         if(animals_dict['data'][d]["_values"]['country'] == world_data['features'][i]['properties']['country']):
+            
             world_data['features'][i]['properties']['national_animal']= animals_dict['data'][d]["_values"]['animal']
             world_data['features'][i]['properties']['sci_name']= animals_dict['data'][d]["_values"]['sci_name']
-            world_data['features'][i]['properties']['media']= animals_dict['data'][d]["_values"]['pic'] 
+            world_data['features'][i]['properties']['media']= animals_dict['data'][d]["_values"]['pic']
+        
+  
     i += 1
 
 with open('national_animals_map.json', 'w') as outfile:
