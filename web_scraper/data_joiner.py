@@ -33,8 +33,6 @@ while i < len(world_data['features']):
             world_data['features'][i]['properties']['national_animal']= animals_dict['data'][d]["_values"]['animal']
             world_data['features'][i]['properties']['sci_name']= animals_dict['data'][d]["_values"]['sci_name']
             world_data['features'][i]['properties']['media']= animals_dict['data'][d]["_values"]['pic']
-        
-  
     i += 1
 
 with open('national_animals_map.json', 'w') as outfile:
