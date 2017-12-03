@@ -9,7 +9,7 @@ exports.show_all_data = function(req, res) {
     if (err) {
       res.send(err);
     } else {
-      res.send(data);
+      res.send(JSON.stringify(data));
     }
   });
 };
