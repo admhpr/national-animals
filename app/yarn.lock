@@ -1116,7 +1116,15 @@ d3-format@1, d3-format@1.2.1:
   version "1.2.1"
   resolved "https://registry.yarnpkg.com/d3-format/-/d3-format-1.2.1.tgz#4e19ecdb081a341dafaf5f555ee956bcfdbf167f"
 
-d3-geo@1.9.0, d3-geo@^1.9.0:
+d3-geo-projection@^2.3.1:
+  version "2.3.1"
+  resolved "https://registry.yarnpkg.com/d3-geo-projection/-/d3-geo-projection-2.3.1.tgz#cf6d1051bec57bf197200201fd991ed063712849"
+  dependencies:
+    commander "2"
+    d3-array "1"
+    d3-geo "^1.7.1"
+
+d3-geo@1.9.0, d3-geo@^1.7.1, d3-geo@^1.9.0:
   version "1.9.0"
   resolved "https://registry.yarnpkg.com/d3-geo/-/d3-geo-1.9.0.tgz#15c7d7a8ea9346e59ed150dc7b1f7f95479056e9"
   dependencies:

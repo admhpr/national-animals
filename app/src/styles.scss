@@ -1,3 +1,30 @@
-body {
-  color: red;
+div.tooltip {
+  display: inline-block;
+  position: absolute;
+  padding: 5px 15px;
+  background: #0099ff;
+  color: #fff;
+  font-weight: 300;
+  z-index: 100;
+  min-width: 40px;
+  transition: all 200ms linear;
+  -webkit-transition: all 200ms linear;
+  -moz-transition: all 200ms linear;
+  -o-transition: all 200ms linear;
+  z-index: 100;
+}
+
+.tooltip:after {
+  display: "block";
+  content: "";
+  position: absolute;
+  bottom: -10px;
+  left: 10px;
+  width: 0px;
+  height: 0px;
+  border-style: solid;
+  border-width: 10px 8px 0 8px;
+  border-color: #0099ff transparent transparent transparent;
+  border-style: inset;
+  -webkit-transform: rotate(360deg);
 }
