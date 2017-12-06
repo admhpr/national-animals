@@ -3,6 +3,7 @@ import ajax from "./ajax.js";
 import * as d3Geo from "d3-geo";
 import * as d3GeoPro from "d3-geo-projection";
 import * as d3 from "d3";
+import * as topojson from "topojson-client";
 
 // set up params to be passed to the ajax module
 
@@ -23,6 +24,8 @@ function main(res) {
     width = 900,
     height = 700,
     sens = 0.25,
+    velocity = 0.01,
+    then = (then = Date.now()),
     focused;
 
   // Orthopgraphic the study of elevated terrain
@@ -39,14 +42,14 @@ function main(res) {
 
   // SVG container
 
-  var canvas = d3
+  var svg = d3
     .select("body")
     .append("svg")
     .attr("width", width)
     .attr("height", height);
 
   // Water datum is binding the data to one svg element
-  canvas
+  svg
     .append("path")
     .datum({ type: "Sphere" })
     .attr("class", "water")
@@ -73,6 +76,11 @@ function main(res) {
 
     var countryById = {},
       countryData = counrtyListMake(root);
+    console.log(root);
+    var countries = topojson.feature(
+      root[0],
+      root[0].objects.national_animals_map
+    );
 
     // fill up the options for the dropdown list and grab ids
     countryData.forEach(d => {
@@ -84,9 +92,27 @@ function main(res) {
 
     // draw paths and the countries
 
-    var group = canvas
+    var world = svg
+      .selectAll("path.land")
+      .data(countries)
+      .enter()
+      .append("path")
+      .attr("class", "land")
+      .attr("d", path);
+
+    var land = topojson.feature(root[0], root[0].objects.national_animals_map),
+      globe = { type: "Sphere" };
+
+    console.log(land);
+    svg
+      .insert("path")
+      .datum(land)
+      .attr("class", "land")
+      .attr("d", path);
+
+    var group = svg
       .selectAll("g")
-      .data(root[0].features)
+      .data(land.features)
       .enter()
       .append("g");
 
@@ -95,6 +121,32 @@ function main(res) {
       .attr("d", path)
       .attr("class", "country")
       .attr("fill", "steelblue");
+
+    // add tooltip attribites on x and y
+    group
+      .attr("x", d => {
+        return path.centroid(d)[0];
+      })
+      .attr("y", d => {
+        return path.centroid(d)[1];
+      })
+      .on("mouseover", d => {
+        console.log(d);
+        div
+          .transition()
+          .duration(200)
+          .style("opacity", 0.9);
+        div
+          .html(d.properties.country + "</br>")
+          .style("left", d3.event.pageX + "px")
+          .style("top", d3.event.pageY - 28 + "px");
+      });
+    // .on("mouseout", d => {
+    //   div
+    //     .transition()
+    //     .duration(500)
+    //     .style("opacity", 0);
+    // });
 
     d3.timer(function() {
       var angle = velocity * (Date.now() - then);
