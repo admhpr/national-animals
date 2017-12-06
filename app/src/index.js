@@ -39,14 +39,14 @@ function main(res) {
 
   // SVG container
 
-  var svg = d3
+  var canvas = d3
     .select("body")
     .append("svg")
     .attr("width", width)
     .attr("height", height);
 
   // Water datum is binding the data to one svg element
-  svg
+  canvas
     .append("path")
     .datum({ type: "Sphere" })
     .attr("class", "water")
@@ -84,7 +84,7 @@ function main(res) {
 
     // draw paths and the countries
 
-    var group = svg
+    var group = canvas
       .selectAll("g")
       .data(root[0].features)
       .enter()
@@ -95,6 +95,12 @@ function main(res) {
       .attr("d", path)
       .attr("class", "country")
       .attr("fill", "steelblue");
+
+    d3.timer(function() {
+      var angle = velocity * (Date.now() - then);
+      projection.rotate([angle, 0, 0]);
+      svg.selectAll("path").attr("d", path.projection(projection));
+    });
   }
 
   // Helpers
