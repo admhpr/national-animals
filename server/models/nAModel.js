@@ -23,7 +23,7 @@ var DataSchema = new Schema(
       }
     ]
   },
-  { collection: "national_animals" }
+  { collection: "topo" }
 );
 
 // var DataSchema = new Schema(
