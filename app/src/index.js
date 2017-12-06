@@ -24,7 +24,7 @@ function main(res) {
     width = 900,
     height = 700,
     sens = 0.25,
-    velocity = 0.01,
+    velocity = 0.0075,
     then = (then = Date.now()),
     focused;
 
@@ -60,7 +60,7 @@ function main(res) {
   var countryTooltip = d3
       .select("body")
       .append("div")
-      .attr("class", "countryToolTip"),
+      .attr("class", "country_tooltip"),
     countryList = d3
       .select("body")
       .append("select")
@@ -132,21 +132,21 @@ function main(res) {
       })
       .on("mouseover", d => {
         console.log(d);
-        div
+        countryTooltip
           .transition()
           .duration(200)
           .style("opacity", 0.9);
-        div
+        countryTooltip
           .html(d.properties.country + "</br>")
           .style("left", d3.event.pageX + "px")
           .style("top", d3.event.pageY - 28 + "px");
+      })
+      .on("mouseout", d => {
+        countryTooltip
+          .transition()
+          .duration(1500)
+          .style("opacity", 0);
       });
-    // .on("mouseout", d => {
-    //   div
-    //     .transition()
-    //     .duration(500)
-    //     .style("opacity", 0);
-    // });
 
     d3.timer(function() {
       var angle = velocity * (Date.now() - then);

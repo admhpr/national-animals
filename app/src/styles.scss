@@ -1,4 +1,4 @@
-div.tooltip {
+div.country_tooltip {
   display: inline-block;
   position: absolute;
   padding: 5px 15px;
@@ -14,7 +14,7 @@ div.tooltip {
   z-index: 100;
 }
 
-.tooltip:after {
+.country_tooltip:after {
   display: "block";
   content: "";
   position: absolute;

@@ -2,7 +2,9 @@
 
 [Web Scraping Reddit](https://www.youtube.com/watch?v=nnnDshuflSI)
 
-# D3
+# D3 Maps
+
+[Canvas or Svg](http://geoexamples.blogspot.com/2013/02/mapping-with-d3js-canvas-or-svg.html)
 
 [Tooltip on map](http://www.d3noob.org/2013/01/adding-tooltips-to-d3js-graph.html)
 
@@ -20,6 +22,10 @@
 
 [Import Dataset](https://docs.mongodb.com/getting-started/shell/import-data/)
 
+[IP Config](https://stackoverflow.com/questions/17588876/mongodb-conf-bind-ip-127-0-0-1-does-not-work-but-0-0-0-0-works)
+
+[Ip Config location](https://docs.mongodb.com/manual/reference/configuration-options/)
+
 # Server
 
 [HTTPS Let's Encrypt](https://www.digitalocean.com/community/tutorials/how-to-secure-nginx-with-let-s-encrypt-on-ubuntu-16-04)
@@ -31,6 +37,8 @@
 [Dealing with CORS restrictions](https://gist.github.com/michiel/1064640)
 
 # Build Tools
+
+[Curl](https://stackoverflow.com/questions/3040904/save-json-outputed-from-a-url-to-a-file)
 
 [Yarn](https://yarnpkg.com/lang/en/docs/)
 
