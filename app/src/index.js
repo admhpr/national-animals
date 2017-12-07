@@ -48,7 +48,7 @@ function main(res) {
     .attr("width", width)
     .attr("height", height);
 
-  // Water datum is binding the data to one svg element
+  // Water datum is binding the data to one svg element representing the water
   svg
     .append("path")
     .datum({ type: "Sphere" })
@@ -131,7 +131,7 @@ function main(res) {
         return path.centroid(d)[1];
       })
       .on("mouseover", d => {
-        console.log(d);
+        renderInfo(d);
         countryTooltip
           .transition()
           .duration(200)
@@ -142,6 +142,7 @@ function main(res) {
           .style("top", d3.event.pageY - 28 + "px");
       })
       .on("mouseout", d => {
+        clearInfo();
         countryTooltip
           .transition()
           .duration(1500)
@@ -156,6 +157,10 @@ function main(res) {
   }
 
   // Helpers
+  function _(selector) {
+    return document.querySelectorAll(selector);
+  }
+
   function counrtyListMake(data) {
     console.log(data);
     var list = [];
@@ -165,6 +170,32 @@ function main(res) {
       list.push(obj);
     });
     return list;
+  }
+
+  function renderInfo(obj) {
+    console.log(obj);
+    let info = _("#info")[0];
+
+    let props = obj.properties;
+
+    Object.keys(props).forEach((key, pos) => {
+      console.log(props[key]);
+      if (props[key].length && pos == 0) {
+        props[key].forEach(el => {
+          let card = document.createElement("div");
+          card.className += "card";
+          info.appendChild(card);
+        });
+      }
+    });
+    console.log(info);
+  }
+
+  function clearInfo() {
+    let info = _("#info")[0];
+    while (info.firstChild) {
+      info.removeChild(info.firstChild);
+    }
   }
 
   // //

@@ -1,9 +1,28 @@
+$white: #fff;
+$blue: #0099ff;
+
+body {
+  display: grid;
+
+  #info {
+    background-color: $white;
+    grid-area: 1 / col4-start / last-line / 6;
+  }
+
+  .card {
+    padding: 20px;
+    background-color: red;
+    border: 2px solid $white;
+    margin: 5px;
+  }
+}
+
 div.country_tooltip {
   display: inline-block;
   position: absolute;
   padding: 5px 15px;
-  background: #0099ff;
-  color: #fff;
+  background: $blue;
+  color: $white;
   font-weight: 300;
   z-index: 100;
   min-width: 40px;
