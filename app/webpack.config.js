@@ -3,6 +3,7 @@ const path = require("path");
 const ExtractTextWebpackPlugin = require("extract-text-webpack-plugin");
 const UglifyJsPlugin = require("uglifyjs-webpack-plugin"); // require webpack plugin
 const OptimizeCSSAssets = require("optimize-css-assets-webpack-plugin"); // require webpack plugin
+const JsDocPlugin = require("jsdoc-webpack-plugin"); //jsdoc plugin generates json on webpack build
 
 let config = {
   entry: "./src/index.js", // entry file
@@ -28,7 +29,10 @@ let config = {
     ] // end rules
   },
   plugins: [
-    new ExtractTextWebpackPlugin("styles.css") // call the ExtractTextWebpackPlugin constructor and name our css file
+    new ExtractTextWebpackPlugin("styles.css"), // call the ExtractTextWebpackPlugin constructor and name our css file
+    new JsDocPlugin({
+      conf: "./jsdoc.conf"
+    })
   ],
   devServer: {
     contentBase: path.resolve(__dirname, "./public"), // A directory or URL to serve HTML content from.

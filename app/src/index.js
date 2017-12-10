@@ -1,23 +1,44 @@
+/**
+ * @fileOverview entry point for application
+ * @requires d3
+ * @requires d3-geo
+ * @requires d3-geo-projection
+ * @requires topojson
+ * @requires UI
+ * @requires Ajax
+ */
+// pulling the style sheet to be bundled
 require("./styles.scss");
-import ajax from "./ajax.js";
+// modules
+import Ajax from "./modules/Ajax.js";
+import UI from "./modules/UI.js";
+
+// 3rd party
 import * as d3Geo from "d3-geo";
 import * as d3GeoPro from "d3-geo-projection";
 import * as d3 from "d3";
 import * as topojson from "topojson-client";
 
-// set up params to be passed to the ajax module
+// Instance variables
+const ui = new UI();
+const ajax = new Ajax();
 
+// set up params to be passed to the ajax module
 let opts = {
   url: "https://datavis.online/map",
   method: "GET"
 };
 
 // request the data
-
 ajax.send(opts).then(res => {
   main(res);
 });
 
+/**
+ * @desc main function
+ *
+ * @param {String} res
+ */
 function main(res) {
   // Config
   var worldData = res,
@@ -70,13 +91,17 @@ function main(res) {
 
   // rendering the globe
 
-  function render(world) {
+  /**
+   *
+   *
+   * @param {JSON} world_json
+   */
+  function render(world_json) {
     // parse the data
-    let root = JSON.parse(world);
+    let root = JSON.parse(world_json);
 
     var countryById = {},
       countryData = counrtyListMake(root);
-    console.log(root);
     var countries = topojson.feature(
       root[0],
       root[0].objects.national_animals_map
@@ -91,7 +116,6 @@ function main(res) {
     });
 
     // draw paths and the countries
-
     var world = svg
       .selectAll("path.land")
       .data(countries)
@@ -103,7 +127,6 @@ function main(res) {
     var land = topojson.feature(root[0], root[0].objects.national_animals_map),
       globe = { type: "Sphere" };
 
-    console.log(land);
     svg
       .insert("path")
       .datum(land)
@@ -131,7 +154,7 @@ function main(res) {
         return path.centroid(d)[1];
       })
       .on("mouseover", d => {
-        renderInfo(d);
+        ui.renderInfo(d);
         countryTooltip
           .transition()
           .duration(200)
@@ -142,7 +165,7 @@ function main(res) {
           .style("top", d3.event.pageY - 28 + "px");
       })
       .on("mouseout", d => {
-        clearInfo();
+        ui.clearInfo();
         countryTooltip
           .transition()
           .duration(1500)
@@ -156,13 +179,13 @@ function main(res) {
     });
   }
 
-  // Helpers
-  function _(selector) {
-    return document.querySelectorAll(selector);
-  }
-
+  /**
+   *
+   *
+   * @param {JSON} data
+   * @returns {Array} the extracted country list from the data set
+   */
   function counrtyListMake(data) {
-    console.log(data);
     var list = [];
     data[0].features.forEach(d => {
       let obj = {};
@@ -171,107 +194,4 @@ function main(res) {
     });
     return list;
   }
-
-  function renderInfo(obj) {
-    console.log(obj);
-    let info = _("#info")[0];
-
-    let props = obj.properties;
-
-    Object.keys(props).forEach((key, pos) => {
-      console.log(props[key]);
-      if (props[key].length && pos == 0) {
-        props[key].forEach(el => {
-          let card = document.createElement("div");
-          card.className += "card";
-          info.appendChild(card);
-        });
-      }
-    });
-    console.log(info);
-  }
-
-  function clearInfo() {
-    let info = _("#info")[0];
-    while (info.firstChild) {
-      info.removeChild(info.firstChild);
-    }
-  }
-
-  // //
-  // var canvas = d3
-  //   .select("body")
-  //   .append("svg")
-  //   .attr("width", 900)
-  //   .attr("height", 700);
-
-  // let root = JSON.parse(res);
-
-  // if (root.length > 0) {
-  //   // load the data
-
-  //   // append each member of the features collection to a path
-  //   var group = canvas
-  //     .selectAll("g")
-  //     .data(root[0].features)
-  //     .enter()
-  //     .append("g");
-
-  //   // set up projection for the map
-  //   var projection = d3GeoPro.geoGilbert();
-
-  //   // generate a path and pass in the projection
-  //   var path = d3.geoPath().projection(projection);
-
-  //   // draw and fill the paths of each country from the dataset
-  //   var countries = group
-  //     .append("path")
-  //     .attr("d", path)
-  //     .attr("class", "country")
-  //     .attr("fill", "steelblue");
-
-  //   //
-  //   var div = d3
-  //     .select("body")
-  //     .append("div")
-  //     .attr("class", "tooltip");
-
-  //   // add tooltip attribites on x and y
-  //   group
-  //     .attr("x", d => {
-  //       return path.centroid(d)[0];
-  //     })
-  //     .attr("y", d => {
-  //       return path.centroid(d)[1];
-  //     })
-  //     .on("mouseover", d => {
-  //       console.log(d);
-  //       var list = createList(d.properties.national_animal);
-  //       console.log(list);
-  //       div
-  //         .transition()
-  //         .duration(200)
-  //         .style("opacity", 0.9);
-  //       div
-  //         .html(d.properties.country + "</br>")
-  //         .style("left", d3.event.pageX + "px")
-  //         .style("top", d3.event.pageY - 28 + "px");
-  //     });
-  //   // .on("mouseout", d => {
-  //   //   div
-  //   //     .transition()
-  //   //     .duration(500)
-  //   //     .style("opacity", 0);
-  //   // });
-  // }
-
-  // function createList(arr) {
-  //   var list = document.createElement("ul");
-  //   arr.forEach(el => {
-  //     var item = document.createElement("li");
-  //     var txt = document.createTextNode(el);
-  //     list.appendChild(item);
-  //   });
-  //   return list;
-  // }
 }
