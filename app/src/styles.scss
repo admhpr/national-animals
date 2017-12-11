@@ -7,9 +7,17 @@ $black: #333;
 body {
   display: grid;
 
+  svg {
+    grid-column: 1;
+  }
+  #controls {
+    grid-column: 1;
+    display: flex;
+    flex-direction: row;
+  }
   #info {
     background-color: $white;
-    grid-area: 1 / col4-start / last-line / 6;
+    grid-area: 2 / col6-start / last-line / 6;
   }
   div.country_tooltip {
     display: inline-block;

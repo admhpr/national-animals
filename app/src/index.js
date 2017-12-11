@@ -1,5 +1,7 @@
 /**
  * @fileOverview entry point for application
+ * @author Adam Harpur
+ * @version 1.0
  * @requires d3
  * @requires d3-geo
  * @requires d3-geo-projection
@@ -29,169 +31,192 @@ let opts = {
   method: "GET"
 };
 
-// request the data
+// request the data and fire main function passing in the response
 ajax.send(opts).then(res => {
   main(res);
 });
 
 /**
  * @desc main function
- *
- * @param {String} res
+ * @param {string} res Stringified JSON response from XHR request
+ * @fires render()
  */
 function main(res) {
-  // Config
-  var worldData = res,
-    width = 900,
-    height = 700,
-    sens = 0.25,
-    velocity = 0.0075,
-    then = (then = Date.now()),
-    focused;
+  if (typeof res == "string") {
+    // Config
+    var worldData = res,
+      width = 700,
+      height = 700,
+      focused;
 
-  // Orthopgraphic the study of elevated terrain
-  var projection = d3
-    .geoOrthographic()
-    .scale(245)
-    .rotate([0, 0])
-    .translate([width / 2, height / 2])
-    .clipAngle(90);
+    // Orthopgraphic the study of elevated terrain
+    var projection = d3
+      .geoOrthographic()
+      .scale(245)
+      .rotate([0, 0])
+      .translate([width / 2, height / 2])
+      .clipAngle(90);
 
-  // Geographical path
+    // Geographical path
 
-  var path = d3.geoPath().projection(projection);
+    var path = d3.geoPath().projection(projection);
 
-  // SVG container
+    // SVG container
 
-  var svg = d3
-    .select("body")
-    .append("svg")
-    .attr("width", width)
-    .attr("height", height);
+    var svg = d3
+      .select("body")
+      .append("svg")
+      .attr("width", width)
+      .attr("height", height);
 
-  // Water datum is binding the data to one svg element representing the water
-  svg
-    .append("path")
-    .datum({ type: "Sphere" })
-    .attr("class", "water")
-    .attr("d", path);
+    // Water datum is binding the data to one svg element representing the water
+    svg
+      .append("path")
+      .datum({ type: "Sphere" })
+      .attr("class", "water")
+      .attr("d", path);
 
+    // rendering the globe
+    render(worldData, svg, path, projection);
+  } else {
+    console.log(`data is not formatted correctly`);
+  }
+}
+
+/**
+ * @param {string} world_json Stringified JSON response from XHR request
+ * @param {function} projection D3 function that handles the map projection
+ * @param {object} svg D3 object that contains the drawn svg
+ * @param {function} path D3 Geo Path Data Generator helper class for generating SVG Path instructions from GeoJSON data
+ *
+ */
+function render(world_json, svg, path, projection) {
   // getting the tooltips ready
+
+  var sens = 0.25,
+    velocity = 0.0075,
+    stopBtn = UI._("input[rel=stop]"),
+    stopped = false,
+    then = (then = Date.now());
+
+  stopBtn[0].addEventListener("click", () => {
+    if (stopped) {
+      stopBtn[0].value = "Start";
+    } else {
+      stopBtn[0].value = "Stop";
+    }
+    stopped = !stopped;
+  });
 
   var countryTooltip = d3
       .select("body")
       .append("div")
       .attr("class", "country_tooltip"),
     countryList = d3
-      .select("body")
+      .select("#controls")
       .append("select")
       .attr("name", "countries");
 
-  render(worldData);
+  // parse the data
+  let root = JSON.parse(world_json);
 
-  // rendering the globe
+  var countryById = {},
+    countryData = counrtyListMake(root[0]);
+  var countries = topojson.feature(
+    root[0],
+    root[0].objects.national_animals_map
+  );
 
-  /**
-   *
-   *
-   * @param {JSON} world_json
-   */
-  function render(world_json) {
-    // parse the data
-    let root = JSON.parse(world_json);
+  console.log(countryData);
+  // fill up the options for the dropdown list and grab ids
+  countryData.forEach(d => {
+    countryById[d.id] = d.name;
+    console.log(d.name);
+    var option = countryList.append("option");
+    option.text(d.name);
+    option.property("value", d.id);
+  });
 
-    var countryById = {},
-      countryData = counrtyListMake(root);
-    var countries = topojson.feature(
-      root[0],
-      root[0].objects.national_animals_map
-    );
+  // draw paths and the countries
+  var world = svg
+    .selectAll("path.land")
+    .data(countries)
+    .enter()
+    .append("path")
+    .attr("class", "land")
+    .attr("d", path);
 
-    // fill up the options for the dropdown list and grab ids
-    countryData.forEach(d => {
-      countryById[d.id] = d.name;
-      var option = countryList.append("option");
-      option.text(d.name);
-      option.property("value", d.id);
+  var land = topojson.feature(root[0], root[0].objects.national_animals_map),
+    globe = { type: "Sphere" };
+
+  svg
+    .insert("path")
+    .datum(land)
+    .attr("class", "land")
+    .attr("d", path);
+
+  var group = svg
+    .selectAll("g")
+    .data(land.features)
+    .enter()
+    .append("g");
+
+  var landMass = group
+    .append("path")
+    .attr("d", path)
+    .attr("class", "country")
+    .attr("fill", "steelblue");
+
+  // add tooltip attribites on x and y
+  group
+    .attr("x", d => {
+      return path.centroid(d)[0];
+    })
+    .attr("y", d => {
+      return path.centroid(d)[1];
+    })
+    .on("mouseover", d => {
+      ui.renderInfo(d);
+      countryTooltip
+        .transition()
+        .duration(200)
+        .style("opacity", 0.9);
+      countryTooltip
+        .html(d.properties.country + "</br>")
+        .style("left", d3.event.pageX + "px")
+        .style("top", d3.event.pageY - 28 + "px");
+    })
+    .on("mouseout", d => {
+      ui.clearInfo();
+      countryTooltip
+        .transition()
+        .duration(1500)
+        .style("opacity", 0);
     });
 
-    // draw paths and the countries
-    var world = svg
-      .selectAll("path.land")
-      .data(countries)
-      .enter()
-      .append("path")
-      .attr("class", "land")
-      .attr("d", path);
+  // Draw Loop
+  d3.timer(function() {
+    var range = UI._("#speed");
+    stopped ? (velocity = range[0].value / 1000) : (velocity = 0);
+    var angle = velocity * (Date.now() - then);
+    projection.rotate([angle, 0, 0]);
+    svg.selectAll("path").attr("d", path.projection(projection));
+  });
+}
 
-    var land = topojson.feature(root[0], root[0].objects.national_animals_map),
-      globe = { type: "Sphere" };
-
-    svg
-      .insert("path")
-      .datum(land)
-      .attr("class", "land")
-      .attr("d", path);
-
-    var group = svg
-      .selectAll("g")
-      .data(land.features)
-      .enter()
-      .append("g");
-
-    var countries = group
-      .append("path")
-      .attr("d", path)
-      .attr("class", "country")
-      .attr("fill", "steelblue");
-
-    // add tooltip attribites on x and y
-    group
-      .attr("x", d => {
-        return path.centroid(d)[0];
-      })
-      .attr("y", d => {
-        return path.centroid(d)[1];
-      })
-      .on("mouseover", d => {
-        ui.renderInfo(d);
-        countryTooltip
-          .transition()
-          .duration(200)
-          .style("opacity", 0.9);
-        countryTooltip
-          .html(d.properties.country + "</br>")
-          .style("left", d3.event.pageX + "px")
-          .style("top", d3.event.pageY - 28 + "px");
-      })
-      .on("mouseout", d => {
-        ui.clearInfo();
-        countryTooltip
-          .transition()
-          .duration(1500)
-          .style("opacity", 0);
-      });
-
-    d3.timer(function() {
-      var angle = velocity * (Date.now() - then);
-      projection.rotate([angle, 0, 0]);
-      svg.selectAll("path").attr("d", path.projection(projection));
-    });
-  }
-
-  /**
-   *
-   *
-   * @param {JSON} data
-   * @returns {Array} the extracted country list from the data set
-   */
-  function counrtyListMake(data) {
-    var list = [];
-    data[0].features.forEach(d => {
-      let obj = {};
-      obj.name = d.properties.country;
-      list.push(obj);
-    });
-    return list;
-  }
+/**
+ *
+ *
+ * @param {JSON} data
+ * @returns {Array} the extracted country list from the data set
+ */
+function counrtyListMake(data) {
+  var list = [];
+  var countries = data.objects["national_animals_map"].geometries;
+  countries.forEach(d => {
+    let obj = {};
+    obj.name = d.properties.country;
+    list.push(obj);
+  });
+  return list;
 }

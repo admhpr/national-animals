@@ -9,11 +9,13 @@
  * @desc Module that handles the sending of ajax requests
  * @export
  * @class Ajax
+ * @throws Request Error
+ * @throws Network Error
  */
 export default class Ajax {
   /**
    * @memberOf Ajax
-   * @param {Object} options
+   * @param {object} options
    * @returns {Promise}  Promise object represents the HTTP response
    */
   send(options) {
