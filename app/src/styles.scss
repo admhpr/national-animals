@@ -3,9 +3,14 @@
 $white: #fff;
 $blue: #0099ff;
 $black: #333;
+$water: #290c1c;
 
 body {
   display: grid;
+
+  .water {
+    background-color: $water;
+  }
 
   svg {
     grid-column: 1;
@@ -14,9 +19,14 @@ body {
     grid-column: 1;
     display: flex;
     flex-direction: row;
+    justify-content: center;
+    position: fixed;
+    select {
+      margin-left: 25em;
+    }
   }
   #info {
-    background-color: $white;
+    background-color: transparent;
     grid-area: 2 / col6-start / last-line / 6;
   }
   div.country_tooltip {
@@ -58,11 +68,21 @@ body {
     min-width: 380px;
     max-width: 480px;
     width: 100%;
-    background: darken($white, 20);
+    background: darken($white, 10);
     color: $black;
+    border-radius: 5px;
+    padding: 0.5em;
+    /* Add shadows to create the "card" effect */
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    transition: 0.3s;
+    /* On mouse-over, add a deeper shadow */
+    figure.card:hover {
+      box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
+    }
+
     img {
       width: 50%;
-      border-radius: 50%;
+      border-radius: 30%;
       border: 4px solid $white;
       transition: all 0.35s ease-in-out;
       transform: scale(0.9);
@@ -83,8 +103,9 @@ body {
       font-size: 0.9em;
       opacity: 1;
       font-style: italic;
-      color: #ffffff;
-      background: #20638f;
+      color: $white;
+      background: darken($blue, 30);
+      border-radius: 2px;
       clear: both;
     }
     figcaption {
@@ -94,10 +115,26 @@ body {
       width: 50%;
     }
     h2 {
-      font-size: 1.3em;
-      font-weight: 300;
+      font-size: 1.6em;
+      font-weight: 800;
       text-transform: uppercase;
       border-bottom: 1px solid rgba(0, 0, 0, 0.2);
     }
+  }
+  .country:hover,
+  .focused {
+    fill: #33cc33;
+  }
+
+  canvas {
+    background: black;
+  }
+
+  #stars {
+    top: 0;
+    position: absolute;
+    width: 100vw;
+    height: 1000px;
+    z-index: -100;
   }
 }

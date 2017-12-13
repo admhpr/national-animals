@@ -10,7 +10,7 @@ export default class UI {
    * checking for an array on the first attribute will be the number of divs required
    * calls renderCard() which loops through all attributes on the
    * property object creating DOM elements for each attribute to attach to the div.
-   *
+   * if no properties are found it will render a card with message.
    * @memberOf UI
    * @param {object} obj Contains a singular countries data
    * @listens country:mouseover
@@ -18,18 +18,21 @@ export default class UI {
    */
   renderInfo(obj) {
     let info = UI._("#info")[0];
-    let props = obj.properties;
-
-    Object.keys(props).forEach((key, pos) => {
-      if (props[key].length && pos == 0) {
-        props[key].forEach((el, pos) => {
-          // let card = document.createElement("div");
-          // card.className += "card";
-          let card = this.renderCard(props, pos);
-          info.appendChild(card);
-        });
-      }
-    });
+    var props = obj.properties;
+    if (props["media"].length) {
+      Object.keys(props).forEach((key, pos) => {
+        if (props[key].length && pos == 0) {
+          props[key].forEach((el, pos) => {
+            let card = this.renderCard(props, pos);
+            info.appendChild(card);
+          });
+        }
+      });
+    } else {
+      var msg = { message: "No Data at this time" };
+      let card = this.renderCard(msg);
+      info.appendChild(card);
+    }
   }
 
   /**

@@ -46,8 +46,7 @@ function main(res) {
     // Config
     var worldData = res,
       width = 700,
-      height = 700,
-      focused;
+      height = 700;
 
     // Orthopgraphic the study of elevated terrain
     var projection = d3
@@ -74,7 +73,8 @@ function main(res) {
       .append("path")
       .datum({ type: "Sphere" })
       .attr("class", "water")
-      .attr("d", path);
+      .attr("d", path)
+      .attr("fill", "#290c1c");
 
     // rendering the globe
     render(worldData, svg, path, projection);
@@ -97,31 +97,36 @@ function render(world_json, svg, path, projection) {
     velocity = 0.0075,
     stopBtn = UI._("input[rel=stop]"),
     stopped = false,
+    dragging = false,
+    focused,
     then = (then = Date.now());
-
+  // listening to the button clicks
   stopBtn[0].addEventListener("click", () => {
     if (stopped) {
+      location.reload();
       stopBtn[0].value = "Start";
     } else {
+      draw();
       stopBtn[0].value = "Stop";
     }
     stopped = !stopped;
   });
 
+  // creates the tooltip
   var countryTooltip = d3
       .select("body")
       .append("div")
       .attr("class", "country_tooltip"),
-    countryList = d3
+    countryDropdownList = d3
       .select("#controls")
       .append("select")
       .attr("name", "countries");
 
-  // parse the data
+  // parse the returned data
   let root = JSON.parse(world_json);
 
   var countryById = {},
-    countryData = counrtyListMake(root[0]);
+    countryData = countryDataMake(root[0]);
   var countries = topojson.feature(
     root[0],
     root[0].objects.national_animals_map
@@ -132,28 +137,13 @@ function render(world_json, svg, path, projection) {
   countryData.forEach(d => {
     countryById[d.id] = d.name;
     console.log(d.name);
-    var option = countryList.append("option");
+    var option = countryDropdownList.append("option");
     option.text(d.name);
     option.property("value", d.id);
   });
 
-  // draw paths and the countries
-  var world = svg
-    .selectAll("path.land")
-    .data(countries)
-    .enter()
-    .append("path")
-    .attr("class", "land")
-    .attr("d", path);
-
   var land = topojson.feature(root[0], root[0].objects.national_animals_map),
     globe = { type: "Sphere" };
-
-  svg
-    .insert("path")
-    .datum(land)
-    .attr("class", "land")
-    .attr("d", path);
 
   var group = svg
     .selectAll("g")
@@ -165,7 +155,33 @@ function render(world_json, svg, path, projection) {
     .append("path")
     .attr("d", path)
     .attr("class", "country")
-    .attr("fill", "steelblue");
+    .attr("fill", function() {
+      // color range
+      let max = 190;
+      let min = 50;
+      return (
+        "hsl(" + (Math.floor(Math.random() * (max - min)) + min) + ",23%,50%)"
+      );
+    })
+    //Drag event
+    .call(
+      d3
+        .drag()
+        .subject(function() {
+          var r = projection.rotate();
+          return {
+            x: r[0] / sens,
+            y: -r[1] / sens
+          };
+        })
+        .on("drag", function() {
+          console.log("drag");
+          var rotate = projection.rotate();
+          projection.rotate([d3.event.x * sens, -d3.event.y * sens, rotate[2]]);
+          svg.selectAll("path").attr("d", path);
+          svg.selectAll(".focused").classed("focused", (focused = false));
+        })
+    );
 
   // add tooltip attribites on x and y
   group
@@ -192,16 +208,63 @@ function render(world_json, svg, path, projection) {
         .transition()
         .duration(1500)
         .style("opacity", 0);
+    })
+    .on("mousemove", function(d) {
+      countryTooltip
+        .style("left", d3.event.pageX + 7 + "px")
+        .style("top", d3.event.pageY - 15 + "px");
     });
 
-  // Draw Loop
-  d3.timer(function() {
-    var range = UI._("#speed");
-    stopped ? (velocity = range[0].value / 1000) : (velocity = 0);
-    var angle = velocity * (Date.now() - then);
-    projection.rotate([angle, 0, 0]);
-    svg.selectAll("path").attr("d", path.projection(projection));
+  //Country focus on option select
+
+  d3.select("select").on("change", function() {
+    var rotate = projection.rotate();
+    var focusedCountry = country(countries, this);
+    console.log(focusedCountry);
+    var p = d3.geoCentroid(focusedCountry);
+    ui.clearInfo();
+    ui.renderInfo(focusedCountry);
+    svg.selectAll(".focused").classed("focused", (focused = false));
+
+    //Globe rotating
+
+    (function transition() {
+      d3
+        .transition()
+        .duration(2500)
+        .tween("rotate", function() {
+          var r = d3.interpolate(projection.rotate(), [-p[0], -p[1]]);
+          return function(t) {
+            projection.rotate(r(t));
+            svg
+              .selectAll("path")
+              .attr("d", path)
+              .classed("focused", function(d, i) {
+                return d.id == focusedCountry.id ? (focused = d) : false;
+              });
+          };
+        });
+    })();
   });
+
+  function country(cnt, sel) {
+    let list = cnt.features;
+    for (var i = 0, l = list.length; i < l; i++) {
+      if (list[i].properties.country == sel.value) {
+        return list[i];
+      }
+    }
+  }
+  // Draw Loop
+  function draw() {
+    d3.timer(function() {
+      var range = UI._("#speed");
+      stopped ? (velocity = range[0].value / 1500) : (velocity = 0);
+      var angle = velocity * (Date.now() - then);
+      projection.rotate([angle, 0, 0]);
+      svg.selectAll("path").attr("d", path.projection(projection));
+    });
+  }
 }
 
 /**
@@ -210,7 +273,7 @@ function render(world_json, svg, path, projection) {
  * @param {JSON} data
  * @returns {Array} the extracted country list from the data set
  */
-function counrtyListMake(data) {
+function countryDataMake(data) {
   var list = [];
   var countries = data.objects["national_animals_map"].geometries;
   countries.forEach(d => {
