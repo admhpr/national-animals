@@ -14,7 +14,7 @@ However that was no the purpose of the project.
 
 ## Documentation
 
-* [Overview of Technologies used](codinglab.me/national_animals)
+* [Overview of Technologies used](http://codinglab.me/national-animals/)
 * [Module API Documentation](http://adamharpur.com/codinglab.me/datavis/docs)
 
 ### Data visualisation
