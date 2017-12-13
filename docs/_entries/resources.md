@@ -2,7 +2,7 @@
 sectionid: resources
 sectionclass: h1
 is-parent: yes
-title: Further Resourcse
+title: Further Resources
 number: 5000
 ---
 

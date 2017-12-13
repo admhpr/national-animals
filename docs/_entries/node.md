@@ -7,7 +7,7 @@ title: Serving Data with Node
 ---
 
 ![Node](./img/node.svg)
-So now that the data is in the database we need a way to serve it.
+Now that the data is in the database we need a way to serve it.
 
 ### What is Node
 
