@@ -6,4 +6,17 @@ number: 3200
 title: Serving Data with Node
 ---
 
-There are three different levels supported, basically four, but the `h4` tags will not be included, within the navigation by default. Read on if you want to change that.
+![Node](../img/node.svg)
+So now that the data is in the database we need a way to serve it.
+
+### What is Node
+
+Node.js is an open-source, cross-platform JavaScript run-time environment for executing JavaScript code server-side. Historically, JavaScript was used primarily for client-side scripting, in which scripts written in JavaScript are embedded in a webpage's HTML, to be run client-side by a JavaScript engine in the user's web browser. Node.js enables JavaScript to be used for server-side scripting, and runs scripts server-side to produce dynamic web page content before the page is sent to the user's web browser. Consequently, Node.js has become one of the foundational elements of the "JavaScript everywhere" paradigm,allowing web application development to unify around a single programming language, rather than rely on a different language for writing server side scripts.
+
+### Design Pattern MVC
+
+![MVC](../img/mvc.png)
+
+See [Directory](https://github.com/harps116/national-animals/tree/master/server)
+
+See [Served Data](datavis.online)

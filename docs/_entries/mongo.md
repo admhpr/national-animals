@@ -7,9 +7,10 @@ number: 3100
 title: Mongo Database
 ---
 
-Okay, so the collection is the entries collection. All of your documentation sections will be placed within that folder.
-The index file will then go over every one of these and put them together.
+### Mongo DB
 
-There are different ways on how you can take care of the order of the entries, depending on which one you chose, you will either have to work with filenames, or with the `number` front matter.
+MongoDB (from humongous) is a free and open-source cross-platform document-oriented database program. Classified as a NoSQL database program, MongoDB uses JSON-like documents with schemas. MongoDB is developed by MongoDB Inc., and is published under a combination of the GNU Affero General Public License and the Apache License.
 
-If you decide to work with file-names, you will just prefix your file names with numbers.
+It is a way for us to store the data in a JSON format and pull the data from the database in a ready to use format.
+
+A NoSQL database is also perfect for this scenario as there is no need for relational tables and the additional overhead can be avoided.

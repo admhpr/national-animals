@@ -6,8 +6,9 @@ title: Asynchronous JavaScript and XML
 number: 4100
 ---
 
-Now for what Docster is all about. The content.
+![AJAX](./img/ajax.png)
+AJAX stands for Asynchronous JavaScript and XML. AJAX is a new technique for creating better, faster, and more interactive web applications with the help of XML, HTML, CSS, and Java Script.
 
-You want to know how all of this works, right?
+SEE [File](https://github.com/harps116/national-animals/blob/master/app/src/modules/Ajax.js)
 
-So Docster makes use of the collections feature, every entry will be written separately and then be compiled into one single HTML file. This ensures that the output is minimal. So in case that you don't want to publish the documentation online, it has the perfect format to be put within another folder. Like for example the Download Package of a Theme.
+SEE [API docs](https://adamharpur.com/codinglab.me/datavis/docs/Ajax.html)

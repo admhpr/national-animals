@@ -5,9 +5,8 @@ title: Introduction
 number: 1000
 ---
 
-Welcome to this demo (and documentation) of Docster. A Documentation Theme for jekyll.
+The Main Objective of this project was to take unstructured data in the form of an HTML page, in this case a Wikipedia page found [here](https://en.wikipedia.org/wiki/List_of_national_animals) and display the data in an interactive way.
 
-Here we'll show you what the theme looks like and how you will use it. Docster makes setting up an organized Documentation a breeze.
-It has a sidebar, that is a table of contents and consists of links, that will scroll you to the respective section.
+It involved scraping, parsing, storing, sending and displaying data in the JSON format.
 
-Docster is perfect for really long and complex as well as short and simple Docs.
+![tool-chain](../img/info_national_animals.png)
