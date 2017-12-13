@@ -5,9 +5,10 @@ title: Introduction
 number: 1000
 ---
 
-## Quick Link
+## Quick Links
 
 [End Result](https://adamharpur.com/codinglab.me/datavis)
+[API docs](https://adamharpur.com/codinglab.me/datavis/docs/)
 
 ---
 
