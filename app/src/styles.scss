@@ -1,9 +1,10 @@
 @import url(https://fonts.googleapis.com/css?family=Raleway:400,200,300,800);
 
 $white: #fff;
-$blue: #0099ff;
+$blue: #012335;
 $black: #333;
 $water: #290c1c;
+$green: #33cc33;
 
 body {
   display: grid;
@@ -53,7 +54,7 @@ body {
       height: 0px;
       border-style: solid;
       border-width: 10px 8px 0 8px;
-      border-color: #0099ff transparent transparent transparent;
+      border-color: $blue transparent transparent transparent;
       border-style: inset;
       -webkit-transform: rotate(360deg);
     }
@@ -104,7 +105,7 @@ body {
       opacity: 1;
       font-style: italic;
       color: $white;
-      background: darken($blue, 30);
+      background: $blue;
       border-radius: 2px;
       clear: both;
     }
@@ -123,11 +124,11 @@ body {
   }
   .country:hover,
   .focused {
-    fill: #33cc33;
+    fill: $green;
   }
 
   canvas {
-    background: black;
+    background: darken($blue, 10);
   }
 
   #stars {

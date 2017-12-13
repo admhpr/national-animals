@@ -14,7 +14,7 @@ require("./styles.scss");
 // modules
 import Ajax from "./modules/Ajax.js";
 import UI from "./modules/UI.js";
-
+import stars from "./modules/stars.js";
 // 3rd party
 import * as d3Geo from "d3-geo";
 import * as d3GeoPro from "d3-geo-projection";
@@ -74,7 +74,7 @@ function main(res) {
       .datum({ type: "Sphere" })
       .attr("class", "water")
       .attr("d", path)
-      .attr("fill", "#290c1c");
+      .attr("fill", "#042a52");
 
     // rendering the globe
     render(worldData, svg, path, projection);
@@ -132,11 +132,9 @@ function render(world_json, svg, path, projection) {
     root[0].objects.national_animals_map
   );
 
-  console.log(countryData);
   // fill up the options for the dropdown list and grab ids
   countryData.forEach(d => {
     countryById[d.id] = d.name;
-    console.log(d.name);
     var option = countryDropdownList.append("option");
     option.text(d.name);
     option.property("value", d.id);
@@ -175,7 +173,6 @@ function render(world_json, svg, path, projection) {
           };
         })
         .on("drag", function() {
-          console.log("drag");
           var rotate = projection.rotate();
           projection.rotate([d3.event.x * sens, -d3.event.y * sens, rotate[2]]);
           svg.selectAll("path").attr("d", path);
@@ -220,7 +217,6 @@ function render(world_json, svg, path, projection) {
   d3.select("select").on("change", function() {
     var rotate = projection.rotate();
     var focusedCountry = country(countries, this);
-    console.log(focusedCountry);
     var p = d3.geoCentroid(focusedCountry);
     ui.clearInfo();
     ui.renderInfo(focusedCountry);
