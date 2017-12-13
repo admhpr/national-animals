@@ -8,7 +8,7 @@ It involved scraping, parsing, storing, sending and displaying data in [JSON](ht
 
 There are ofcousre more efficient and better ways to obtain data from [Wikipedia](https://en.wikipedia.org/w/api.php?action=parse&page=Flag_of_Ireland&format=json).
 
-However that was no the purpose of the project.
+However that was not the purpose of the project.
 
 ![tool-chain](img/info_national_animals.png)
 
