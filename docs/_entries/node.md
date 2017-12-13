@@ -6,7 +6,7 @@ number: 3200
 title: Serving Data with Node
 ---
 
-![Node](../img/node.svg)
+![Node](./img/node.svg)
 So now that the data is in the database we need a way to serve it.
 
 ### What is Node
@@ -15,7 +15,7 @@ Node.js is an open-source, cross-platform JavaScript run-time environment for ex
 
 ### Design Pattern MVC
 
-![MVC](../img/mvc.png)
+![MVC](./img/mvc.png)
 
 See [Directory](https://github.com/harps116/national-animals/tree/master/server)
 

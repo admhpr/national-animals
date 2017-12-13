@@ -26,7 +26,7 @@ This will send a request out to the URL and return the data, in this case it wil
 
 ## Raw Data
 
-![Raw Data](../img/data_set_scrapy.png)
+![Raw Data](./img/data_set_scrapy.png)
 
 ## Parsed Data
 
@@ -34,4 +34,4 @@ This will send a request out to the URL and return the data, in this case it wil
 
 ## Example
 
-![Example](../img/national_animals_scrape.gif)
+![Example](./img/national_animals_scrape.gif)
