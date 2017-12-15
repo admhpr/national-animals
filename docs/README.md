@@ -10,7 +10,6 @@ There are ofcousre more efficient and better ways to obtain data from [Wikipedia
 
 However that was not the purpose of the project.
 
-A quick look at the toolchain: 
 ![tool-chain](img/info_national_animals.png)
 
 ## Documentation
