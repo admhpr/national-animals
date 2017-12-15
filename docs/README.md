@@ -10,6 +10,7 @@ There are ofcousre more efficient and better ways to obtain data from [Wikipedia
 
 However that was not the purpose of the project.
 
+A quick look at the toolchain: 
 ![tool-chain](img/info_national_animals.png)
 
 ## Documentation
@@ -20,7 +21,7 @@ However that was not the purpose of the project.
 ### Data visualisation
 
 * [Raw Data](https://datavis.online/map)
-* [Globe](http://adamharpur.com/codinglab.me/datavis)
+* [Interactive Globe](http://adamharpur.com/codinglab.me/datavis)
 
 ### Acknowledgements
 
