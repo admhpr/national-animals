@@ -24,7 +24,7 @@ However that was not the purpose of the project.
 
 ### Acknowledgements
 
-Largely inspired by the [work](http://kyrandale.com/static/talks/reveal.js/index_pydata2015.html#/) of Kryan Dale and his [book](https://www.amazon.com/Data-Visualization-Python-JavaScript-Transform/dp/1491920513) on Data Viz with Python and Javascript.
+Largely inspired by the [work](http://kyrandale.com/static/talks/reveal.js/index_pydata2015.html#/) of Kyran Dale and his [book](https://www.amazon.com/Data-Visualization-Python-JavaScript-Transform/dp/1491920513) on Data Viz with Python and Javascript.
 
 
 This Project is Licensed under
