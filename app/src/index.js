@@ -27,7 +27,7 @@ const ajax = new Ajax();
 
 // set up params to be passed to the ajax module
 let opts = {
-  url: "https://datavis.online/map",
+  url: "https://raw.githubusercontent.com/harps116/national-animals/master/web_scraper/national_animals_map.topojson",
   method: "GET"
 };
 
