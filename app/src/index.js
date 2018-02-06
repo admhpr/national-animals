@@ -27,12 +27,14 @@ const ajax = new Ajax();
 
 // set up params to be passed to the ajax module
 let opts = {
-  url: "https://raw.githubusercontent.com/harps116/national-animals/master/web_scraper/national_animals_map.topojson",
+  url:
+    "https://raw.githubusercontent.com/harps116/national-animals/master/web_scraper/national_animals_map.topojson",
   method: "GET"
 };
 
 // request the data and fire main function passing in the response
 ajax.send(opts).then(res => {
+  console.log(res)
   main(res);
 });
 
