@@ -21,7 +21,8 @@ However that was not the purpose of the project.
 
 ![spinning-globe](img/data_vis.gif)
 
-* [Raw Data](https://datavis.online/map)
+* [Raw Data](https://raw.githubusercontent.com/harps116/national-animals/master/web_scraper/national_animals_map.topojson)
+
 * [Interactive Globe](http://adamharpur.com/codinglab.me/datavis)
 
 ### Acknowledgements
