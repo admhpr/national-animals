@@ -8,7 +8,6 @@
  */
 
 const dblPI = 2 * Math.PI;
-console.log("hello");
 /**
  * Star Field Config
  *

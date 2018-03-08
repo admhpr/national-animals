@@ -34,7 +34,6 @@ let opts = {
 
 // request the data and fire main function passing in the response
 ajax.send(opts).then(res => {
-  console.log(res)
   main(res);
 });
 
@@ -81,7 +80,7 @@ function main(res) {
     // rendering the globe
     render(worldData, svg, path, projection);
   } else {
-    console.log(`data is not formatted correctly`);
+    console.error(`data is not formatted correctly`);
   }
 }
 
