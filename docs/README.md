@@ -19,7 +19,7 @@ However that was not the purpose of the project.
 
 ### Data visualisation
 
-![spinning-globe](img/data_vis.png)
+![spinning-globe](img/data_vis.gif)
 
 * [Raw Data](https://datavis.online/map)
 * [Interactive Globe](http://adamharpur.com/codinglab.me/datavis)
