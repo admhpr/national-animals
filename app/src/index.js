@@ -34,6 +34,7 @@ let opts = {
 
 // request the data and fire main function passing in the response
 ajax.send(opts).then(res => {
+  console.log(res);
   main(res);
 });
 

@@ -71,7 +71,7 @@ export default class UI {
         var el;
         if (item.charAt(0) == "/") {
           el = document.createElement("img");
-          el.setAttribute("src", item);
+          el.setAttribute("src", `https:${item}`);
         } else {
           el = document.createElement("p");
           let text = document.createTextNode(`${item}`);
